@@ -122,11 +122,17 @@ const Homepage = () => {
 
       {/* Pagination controls for pagination mode */}
       {loadingType.type === "pagination" && paginatedData && (
-        <PaginationControls
-          currentPage={currentPage}
-          totalPages={paginatedData.totalPages}
-          onPageChange={setCurrentPage}
-        />
+        <div className="flex flex-col items-center space-y-2">
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={paginatedData.totalPages}
+            onPageChange={setCurrentPage}
+          />
+          <div className="text-sm text-muted-foreground">
+            Page {currentPage} of {paginatedData.totalPages} (
+            {paginatedData.pokemons.length} Pokemon shown)
+          </div>
+        </div>
       )}
     </section>
   );
