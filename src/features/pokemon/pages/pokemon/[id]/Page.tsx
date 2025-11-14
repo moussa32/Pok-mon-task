@@ -43,14 +43,12 @@ const PokemonDetailPage = () => {
 
         <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
           {/* Top Section - Name and ID */}
-          <div className="p-6 border-b text-center space-y-4">
+          <div className="p-6 border-b text-center bg-linear-to-l from-[#eb479d] to-[#a854f4] space-y-4 text-white">
             <h1 className="text-3xl font-bold flex items-center justify-center capitalize gap-3">
               <SlEnergy className="text-yellow-400" size={32} />
               {pokemon!.name}
             </h1>
-            <p className="text-gray-500">
-              #{pokemon!.id.toString().padStart(3, "0")}
-            </p>
+            <p>#{pokemon!.id.toString().padStart(3, "0")}</p>
           </div>
 
           <div className="p-6">

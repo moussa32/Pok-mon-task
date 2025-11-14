@@ -24,7 +24,7 @@ const LoadingTypeButtons = ({
         <Button
           className={`capitalize ${
             loadingType.type === type.type
-              ? "bg-primary text-primary-foreground"
+              ? "bg-primary text-primary-foreground hover:text-white hover:bg-primary/90"
               : ""
           }`}
           onClick={() => onLoadingTypeChange(type as LoadingType)}

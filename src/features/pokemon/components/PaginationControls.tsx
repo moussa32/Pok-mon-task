@@ -97,8 +97,8 @@ const PaginationControls = ({
                 onClick={() => onPageChange(page as number)}
                 className={
                   page === currentPage
-                    ? "cursor-default"
-                    : "cursor-pointer hover:bg-gray-100"
+                    ? "cursor-default bg-gray-950 text-white hover:bg-gray-950"
+                    : "cursor-pointer hover:bg-gray-950/30 hover:text-white"
                 }
               >
                 {page}
