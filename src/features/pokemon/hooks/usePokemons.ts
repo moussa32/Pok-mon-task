@@ -101,7 +101,7 @@ export const useInfinitePokemons = (limit: number = 20) => {
 
       return detailedPokemons;
     },
-    getNextPageParam: (lastPage: Pokemon[], allPages: Pokemon[][]) => {
+    getNextPageParam: (allPages: Pokemon[]) => {
       // Return the offset for the next page
       return allPages.length * limit;
     },

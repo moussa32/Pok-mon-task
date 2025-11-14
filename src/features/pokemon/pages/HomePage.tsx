@@ -2,7 +2,7 @@ import { usePokemons, useInfinitePokemons } from "../hooks/usePokemons";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
 import { POKEMONS_PER_PAGE } from "../constants";
 import type { LoadingType } from "../types/LoadingTypes";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HeaderSection from "../components/HeaderSection";
 import PokemonGrid from "../components/PokemonGrid";
 import InfiniteScrollLoader from "../components/InfiniteScrollLoader";
@@ -16,6 +16,7 @@ const Homepage = () => {
   });
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [initialLoad, setInitialLoad] = useState(true);
 
   // For pagination
   const { data: paginatedData, isLoading: isPaginationLoading } = usePokemons(
@@ -32,6 +33,13 @@ const Homepage = () => {
     isFetchingNextPage,
   } = useInfinitePokemons(POKEMONS_PER_PAGE);
 
+  // Set initial load to false when data is first loaded
+  useEffect(() => {
+    if (paginatedData && initialLoad) {
+      setInitialLoad(false);
+    }
+  }, [paginatedData, initialLoad]);
+
   // Use the custom infinite scroll hook
   const { lastElementRef: lastPokemonElementRef } = useInfiniteScroll({
     loadingType: loadingType.type,
@@ -40,8 +48,8 @@ const Homepage = () => {
     fetchNextPage,
   });
 
-  // Render loading skeletons
-  if (loadingType.type === "pagination" && isPaginationLoading) {
+  // Render loading skeletons only during initial load
+  if (loadingType.type === "pagination" && isPaginationLoading && initialLoad) {
     return (
       <section className="space-y-4">
         <HeaderSection
@@ -51,6 +59,7 @@ const Homepage = () => {
             // Reset to first page when switching to pagination
             if (type.type === "pagination") {
               setCurrentPage(1);
+              setInitialLoad(true);
             }
           }}
         />
@@ -69,6 +78,7 @@ const Homepage = () => {
             // Reset to first page when switching to pagination
             if (type.type === "pagination") {
               setCurrentPage(1);
+              setInitialLoad(true);
             }
           }}
         />
@@ -83,17 +93,21 @@ const Homepage = () => {
       ? infiniteData?.pages.flat() || []
       : paginatedData?.pokemons || [];
 
+  // Reset initialLoad when switching loading types
+  const handleLoadingTypeChange = (type: LoadingType) => {
+    setLoadingType(type);
+    // Reset to first page when switching to pagination
+    if (type.type === "pagination") {
+      setCurrentPage(1);
+      setInitialLoad(true);
+    }
+  };
+
   return (
     <section className="space-y-4">
       <HeaderSection
         loadingType={loadingType}
-        onLoadingTypeChange={(type) => {
-          setLoadingType(type);
-          // Reset to first page when switching to pagination
-          if (type.type === "pagination") {
-            setCurrentPage(1);
-          }
-        }}
+        onLoadingTypeChange={handleLoadingTypeChange}
       />
 
       <PokemonGrid
