@@ -4,13 +4,21 @@ import type { Pokemon, PokemonResponse } from "../types/Pokemon";
 
 // Updated hook to support pagination
 export const usePokemons = (offset: number = 0, limit: number = 20) => {
-  return useQuery<Pokemon[]>({
+  return useQuery<{
+    pokemons: Pokemon[];
+    totalCount: number;
+    totalPages: number;
+  }>({
     queryKey: ["getPokemons", offset, limit],
     queryFn: async () => {
       // First, get the list of pokemons with pagination
       const response: PokemonResponse = await client.get(
         `/api/v2/pokemon?limit=${limit}&offset=${offset}`
       );
+
+      // Get total count for pagination
+      const totalCount = response.count;
+      const totalPages = Math.ceil(totalCount / limit);
 
       // Then, fetch detailed data for each pokemon using Promise.all
       const detailedPokemons = await Promise.all(
@@ -43,7 +51,11 @@ export const usePokemons = (offset: number = 0, limit: number = 20) => {
         })
       );
 
-      return detailedPokemons;
+      return {
+        pokemons: detailedPokemons,
+        totalCount,
+        totalPages,
+      };
     },
   });
 };
