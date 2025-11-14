@@ -8,15 +8,26 @@ import PokemonGrid from "../components/PokemonGrid";
 import InfiniteScrollLoader from "../components/InfiniteScrollLoader";
 import PaginationControls from "../components/PaginationControls";
 import LoadingSkeletons from "../components/LoadingSkeletons";
+import { useBackground } from "@/context/BackgroundContext";
 
 const Homepage = () => {
   const [loadingType, setLoadingType] = useState<LoadingType>({
     type: "pagination",
     message: "page controls",
   });
+  const { updateGradient } = useBackground();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [initialLoad, setInitialLoad] = useState(true);
+
+  // Update background gradient when loading type changes
+  useEffect(() => {
+    if (loadingType.type === "infinite") {
+      updateGradient("#e0e8fd", "#eff6ff");
+    } else {
+      updateGradient("#effcf3", "#d4fbe6");
+    }
+  }, [loadingType.type, updateGradient]);
 
   // For pagination
   const { data: paginatedData, isLoading: isPaginationLoading } = usePokemons(

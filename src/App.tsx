@@ -2,10 +2,18 @@ import { Route, Routes } from "react-router";
 import Home from "./features/pokemon/pages/HomePage";
 import PokemonDetailsPage from "./features/pokemon/pages/pokemon/[id]/Page";
 import QueryErrorBoundary from "./components/ErrorBoundary";
+import { useBackground } from "@/context/BackgroundContext";
 
 function App() {
+  const { gradientFrom, gradientTo } = useBackground();
+
   return (
-    <section className="min-h-screen pt-8 pb-16 bg-linear-to-tr from-[#effcf3] to-[#d4fbe6]">
+    <section
+      className="min-h-screen pt-8 pb-16"
+      style={{
+        background: `linear-gradient(to top right, ${gradientFrom}, ${gradientTo})`,
+      }}
+    >
       <section className="px-5 xl:px-0 container mx-auto">
         <QueryErrorBoundary>
           <Routes>

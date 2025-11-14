@@ -3,10 +3,18 @@ import { usePokemon } from "../../../hooks/usePokemon";
 import { Button } from "@/components/ui/button";
 import { SlEnergy } from "react-icons/sl";
 import QueryErrorBoundary from "@/components/ErrorBoundary";
+import { useEffect } from "react";
+import { useBackground } from "@/context/BackgroundContext";
 
 const PokemonDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const { data: pokemon, isLoading } = usePokemon(id || "");
+  const { updateGradient } = useBackground();
+
+  // Update background gradient for Pokemon details page
+  useEffect(() => {
+    updateGradient("#fbe7f3", "#faf4ff");
+  }, [updateGradient]);
 
   if (isLoading) {
     return (
